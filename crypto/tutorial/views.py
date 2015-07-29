@@ -4,7 +4,7 @@ from Crypto.PublicKey import RSA
 from django.http import HttpResponse
 import os,json
 # Create your views here.
-token = 'auto3d'
+token = 'shanshan'
 private_key_path = 'private_key.pem'
 public_key_path = 'public_key.pem'
 result = 'laoshifu'

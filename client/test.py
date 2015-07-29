@@ -3,7 +3,7 @@ __author__ = 'wayne'
 from Crypto.PublicKey import RSA
 import requests, json
 public_key_path = 'public_key.pem'
-token = 'auto3d'
+token = 'shanshan'
 nonce = '12345678'
 
 def getPublicKey():
