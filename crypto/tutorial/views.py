@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
 from django.http import HttpResponse
 import os,json
 # Create your views here.
@@ -28,9 +29,11 @@ def checkMessage(cipher_text):
     if(keyIsExist(private_key_path)):
         f = open(private_key_path, 'r')
         key = RSA.importKey(f.read())
-        cipher = cipher_text.split(',')[0][2:-1].decode('string-escape')
-        message = (cipher,)
-        result = key.decrypt(message)
+        message = cipher_text.decode('string-escape')
+        # message = (cipher,)
+        c = PKCS1_OAEP.new(key)
+        # result = key.decrypt(message)
+        result = c.decrypt(message)
         return result == token
     else:
         #initialKey()
@@ -50,24 +53,3 @@ def safe_message(request):
             return HttpResponse(json.dumps({'result': token}), content_type="application/json")
         else:
             return HttpResponse(json.dumps({'result': 'please contact admin for public key'}), content_type="application/json")
-
-
-
-def getPublicKey():
-    f = open(public_key_path, 'r')
-    key = RSA.importKey(f.read())
-    f.close()
-    return key
-
-def encryptMessage(message):
-    p_key = getPublicKey()
-    result = p_key.encrypt(token, nonce)
-    #print 'client encrypt message %s' % result
-    return result
-
-
-def test(request):
-    message = encryptMessage(token)
-    result = checkMessage(message)
-    print result
-    return HttpResponse(json.dumps({'result': result}), content_type="application/json")
